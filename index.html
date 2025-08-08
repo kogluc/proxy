@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Proxy API</title>
+  <style>body {font-family: monospace;white-space: pre-wrap;margin: 0;}</style>
+</head>
+<body>
+  <script>
+    (async () => {
+      const params = new URLSearchParams(location.search);
+      const site = params.get("site");
+      if (!site) {document.body.textContent = "Hata: 'site' parametresi eksik!";return;}
+      const proxyURL = `https://script.google.com/macros/s/AKfycbw_MYcInMCCYiQZNzeaZAp7Upl_UwNZS2O1rlx1bDBwBT7UFJJPEpvNSSmbkCgWXATk/exec?site=${encodeURIComponent(site)}`;
+      try {
+        const res = await fetch(proxyURL);
+        const html = await res.text();
+        const escaped = html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        document.body.innerHTML = escaped;
+      } catch (err) {
+        document.body.textContent = "Hata: " + err.message;
+      }
+    })();
+  </script>
+</body>
+</html>
