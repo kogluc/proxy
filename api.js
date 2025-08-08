@@ -27,6 +27,17 @@ async function fetchWithRetry(url, retries = 1) {
 }
 
 window.addEventListener("load", async () => {
+  let newUrl;
+  if (location.pathname.endsWith("index.html")) {
+    const basePath = location.pathname.replace(/index\.html$/, '');
+    newUrl = `${location.origin}${basePath}?site=`;
+  } else if (location.pathname.endsWith('/')) {
+    newUrl = `${location.origin}${location.pathname}?site=`;
+  } else {
+    newUrl = `${location.origin}${location.pathname}/?site=`;
+  }
+  history.replaceState({}, "", newUrl);
+  
   const params = new URLSearchParams(location.search);
   const site = params.get("site");
   const pathname = location.pathname.split('/').filter(Boolean);
