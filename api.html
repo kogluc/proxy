@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kaynak Kod Çekici</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+    h1 { color: #333; }
+    input, button, textarea { font-size: 14px; margin-top: 10px; }
+    textarea { width: 100%; }
+    #siteUrl { width: 70%; padding: 6px; }
+    button { padding: 6px 12px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Kaynak Kod Çek</h1>
+  <p>Site adresini girin ve "Getir"e tıklayın.</p>
+
+  <input type="text" id="siteUrl" placeholder="https://example.com">
+  <button id="getBtn">Getir</button>
+  <br><br>
+  <textarea id="result" rows="20"></textarea>
+  <script>
+    const scriptUrl = "https://script.google.com/macros/s/AKfycbylBCZGCj7cO2Eu5QLORLioX-D_W9a86KlKSOWbIIx8UZA2Ey9yEwUXdcsFzgzOQE0A/exec";
+    document.getElementById("getBtn").addEventListener("click", () => {
+      const site = document.getElementById("siteUrl").value.trim();
+      if (!site) return alert("Lütfen site adresi girin");
+      const url = `${scriptUrl}?site=${encodeURIComponent(site)}`;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          if (data.html) {
+            document.getElementById("result").value = data.html;
+          } else {
+            document.getElementById("result").value = "Hata: " + (data.error || "Bilinmeyen hata");
+          }
+        })
+        .catch(err => {
+          document.getElementById("result").value = "İstek hatası: " + err;
+        });
+    });
+  </script>
+</body>
+</html>
